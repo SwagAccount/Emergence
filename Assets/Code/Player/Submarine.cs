@@ -31,6 +31,12 @@ public class Submarine : MonoBehaviour
     public Slider DepthSlider;
     public RectTransform OxygenIndicator;
     public float OxygenIndicatorAngle = 43f;
+    public GameObject Shaker;
+    public Image SuffocateImage;
+
+    public float ShakeSpeed = 10;
+    public float ShakeStrength = 10;
+    public float ShakeT = 1;
 
     public GameObject Propellor;
     public float PropellorSpeed = 10;
@@ -43,6 +49,14 @@ public class Submarine : MonoBehaviour
     public float Oxygen = 1;
     public float OxygenRegenSpeed = 1f;
     public float OxygenUseSpeed = 0.05f;
+
+    public float LeakDepth = 4.5f;
+    public float MaxLeakDepth = 6;
+    public float LeakRate = 0.2f;
+
+    public float SuffocateSpeed = 0.5f;
+    public float SuffocateRecover = 1f;
+    public float SuffocateAmount;
 
 
     private float propSize;
@@ -74,6 +88,12 @@ public class Submarine : MonoBehaviour
 
         Drag();
 
+        Shake();
+
+        Leak();
+
+        Suffocate();
+
         if (transform.position.y > MaxHeight)
         {
             var vel = rigidBody.velocity;
@@ -82,6 +102,36 @@ public class Submarine : MonoBehaviour
         }
 
         ManageOxygen();
+    }
+
+    void Suffocate()
+    {
+        var suffocating = Oxygen <= 0.01f;
+
+        SuffocateAmount += (suffocating ? SuffocateSpeed : -SuffocateRecover) * Time.deltaTime;
+        SuffocateAmount = Mathf.Clamp01(SuffocateAmount);
+
+        SuffocateImage.color = Color.black.WithAlpha(SuffocateAmount);
+    }
+
+    void Leak()
+    {
+        float currentDepth = depth;
+        
+        float leak = Mathf.InverseLerp(LeakDepth, MaxLeakDepth, currentDepth);
+
+        float leakAmount = leak * LeakRate;
+        ShakeT = leak;
+        Oxygen -= leakAmount * Time.deltaTime;
+        Oxygen = Mathf.Clamp01(Oxygen);
+    }
+
+    void Shake()
+    {
+        var time = Time.time * ShakeSpeed * ShakeT;
+        var shakePos = (new Vector3(Mathf.PerlinNoise1D(time + 100), Mathf.PerlinNoise1D(time + 100), 0.5f) - Vector3.one/2) * ShakeStrength;
+
+        Shaker.transform.localPosition = Vector3.Lerp(Vector3.zero, shakePos, ShakeT);
     }
 
     void ManageOxygen()
