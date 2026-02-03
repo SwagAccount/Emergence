@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,24 +13,51 @@ public class Submarine : MonoBehaviour
     public float ThrustPower = 10f;
 
     public GameObject Camera;
+    public float CameraSmooth = 10f;
 
     public float CameraHeight = 1.4f;
 
+    public float TargetWaterLevel = 4f;
     public float WaterLevel = 3.74f;
     public float TargetDepth = 0;
+    public float MaxHeight = 3.8f;
+    public float MaxDepth = 3.5f;
+    public float DepthSpring = 5f;
+    public float DepthDamp = 6f;
+    public float DepthDepthSlower = 1f;
 
     public Wheel wheel;
     public Slider Thruster;
+    public Slider DepthSlider;
+    public RectTransform OxygenIndicator;
+    public float OxygenIndicatorAngle = 43f;
+
+    public GameObject Propellor;
+    public float PropellorSpeed = 10;
+    public float PropellorSmooth = 1;
+
+    public float DepthDragMult = 2;
+
+    public float BaseDrag = 5;
+
+    public float Oxygen = 1;
+    public float OxygenRegenSpeed = 1f;
+    public float OxygenUseSpeed = 0.05f;
+
+
+    private float propSize;
 
     Rigidbody rigidBody;
     void Start()
     {
+        propSize = Propellor.transform.localScale.x;
         rigidBody = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
-        Camera.transform.position = transform.position + Vector3.up * CameraHeight;
+        var targetPos = transform.position + Vector3.up * CameraHeight;
+        Camera.transform.position = Vector3.Lerp(Camera.transform.position, targetPos, Time.deltaTime * CameraSmooth);
     }
 
     void FixedUpdate()
@@ -41,19 +69,77 @@ public class Submarine : MonoBehaviour
         DoThrust();
 
         Depth();
+
+        PropellorAnimation();
+
+        Drag();
+
+        if (transform.position.y > MaxHeight)
+        {
+            var vel = rigidBody.velocity;
+            vel.y = Mathf.Clamp(vel.y, -1000, 0);
+            rigidBody.velocity = vel;
+        }
+
+        ManageOxygen();
+    }
+
+    void ManageOxygen()
+    {
+        var underWater = transform.position.y < WaterLevel;
+
+        Oxygen += (underWater ? -OxygenUseSpeed : OxygenRegenSpeed) * Time.deltaTime;
+        Oxygen = Mathf.Clamp01(Oxygen);
+
+        var rot = Mathf.Lerp(-OxygenIndicatorAngle, OxygenIndicatorAngle, Oxygen);
+        OxygenIndicator.localEulerAngles = new Vector3(0, 0, rot);
+    }
+
+    void Drag()
+    {
+        var drag = BaseDrag + depth * DepthDragMult;
+        rigidBody.drag = drag;
+        rigidBody.angularDrag = drag;
+    }
+
+    private float depth => Mathf.Clamp(-(transform.position.y - TargetWaterLevel), 0, 1000);
+
+    float propT;
+    float propThrust;
+    void PropellorAnimation()
+    {
+        propThrust = Mathf.Lerp(propThrust, Thrust, Time.deltaTime * PropellorSmooth);
+        propT += Time.deltaTime * propThrust * PropellorSpeed;
+        var size = (Mathf.Cos(propT) + 1) / 2;
+        var scale = Propellor.transform.localScale;
+        scale.x = size * propSize;
+        Propellor.transform.localScale = scale;
     }
 
     void Input()
     {
         WheelRotation = -wheel.rot;
         Thrust = Thruster.value;
+        TargetDepth = Mathf.Lerp(MaxDepth, 0, DepthSlider.value);
     }
 
     void Depth()
     {
-        float targetDepth = WaterLevel - TargetDepth;
-        float distance = transform.position.y - targetDepth;
-        rigidBody.AddForce(-Vector3.up * distance);
+        float targetY = TargetWaterLevel - TargetDepth;
+        float displacement = targetY - transform.position.y;
+
+        float force =
+            (displacement * DepthSpring) -
+            (rigidBody.velocity.y * DepthDamp);
+
+        if (transform.position.y > MaxHeight)
+        {
+            force = Mathf.Min(force, 0f);
+        }
+
+        force /= depth * DepthDepthSlower;
+
+        rigidBody.AddForce(Vector3.up * force, ForceMode.Acceleration);
     }
 
     void DoThrust()
