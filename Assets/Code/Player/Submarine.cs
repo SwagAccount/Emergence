@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -73,9 +74,12 @@ public class Submarine : MonoBehaviour
 
     private float LeakedWater;
 
+    public List<BoltHole> BoltHoles = new();
+
     Rigidbody rigidBody;
     void Start()
     {
+        lastBoltHealth = Health;
         propSize = Propellor.transform.localScale.x;
         rigidBody = GetComponent<Rigidbody>();
     }
@@ -106,6 +110,8 @@ public class Submarine : MonoBehaviour
 
         Suffocate();
 
+        Bolts();
+
         if (transform.position.y > MaxHeight)
         {
             var vel = rigidBody.velocity;
@@ -114,6 +120,22 @@ public class Submarine : MonoBehaviour
         }
 
         ManageOxygen();
+    }
+    public float lastBoltHealth;
+    void Bolts()
+    {
+        if (lastBoltHealth - Health < 10)
+            return;
+
+        for (int i = 0; i < (lastBoltHealth - Health) / 10; i++)
+        {
+            var validBoltHoles = BoltHoles.Where(x => x.Bolt != null).ToList();
+
+            if (validBoltHoles.Count > 0)
+                validBoltHoles[Random.Range(0, validBoltHoles.Count())].FreeBolt();
+        }
+
+        lastBoltHealth = Health;
     }
 
     void Suffocate()
