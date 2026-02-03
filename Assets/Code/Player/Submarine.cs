@@ -33,6 +33,7 @@ public class Submarine : MonoBehaviour
     public float OxygenIndicatorAngle = 43f;
     public GameObject Shaker;
     public Image SuffocateImage;
+    public WaterUI WaterUI;
 
     public float ShakeSpeed = 10;
     public float ShakeStrength = 10;
@@ -50,16 +51,27 @@ public class Submarine : MonoBehaviour
     public float OxygenRegenSpeed = 1f;
     public float OxygenUseSpeed = 0.05f;
 
-    public float LeakDepth = 4.5f;
-    public float MaxLeakDepth = 6;
-    public float LeakRate = 0.2f;
+    public float DepthLeakDepth = 3.8f;
+    public float MaxDepthLeakDepth = 5;
+    public float DepthLeakDamage = 20f;
+
 
     public float SuffocateSpeed = 0.5f;
     public float SuffocateRecover = 1f;
     public float SuffocateAmount;
 
+    public float DrownLevel = 0.8f;
 
     private float propSize;
+
+    public float Health = 100f;
+    public AnimationCurve HealthWaterLeak;
+    public AnimationCurve HealthOxygenLeak;
+
+    public float WaterLossRate = 0.2f;
+    public float DepthLeakMult = 1f;
+
+    private float LeakedWater;
 
     Rigidbody rigidBody;
     void Start()
@@ -106,7 +118,7 @@ public class Submarine : MonoBehaviour
 
     void Suffocate()
     {
-        var suffocating = Oxygen <= 0.01f;
+        var suffocating = Oxygen <= 0.01f || LeakedWater > DrownLevel;
 
         SuffocateAmount += (suffocating ? SuffocateSpeed : -SuffocateRecover) * Time.deltaTime;
         SuffocateAmount = Mathf.Clamp01(SuffocateAmount);
@@ -116,14 +128,28 @@ public class Submarine : MonoBehaviour
 
     void Leak()
     {
+        WaterUI.Level = LeakedWater;
+        if (transform.position.y >= WaterLevel)
+        {
+            LeakedWater -= WaterLossRate * Time.deltaTime;
+            LeakedWater = Mathf.Clamp01(LeakedWater);
+            return;
+        }
+
         float currentDepth = depth;
         
-        float leak = Mathf.InverseLerp(LeakDepth, MaxLeakDepth, currentDepth);
+        float depthDamage = Mathf.InverseLerp(DepthLeakDepth, MaxDepthLeakDepth, currentDepth);
 
-        float leakAmount = leak * LeakRate;
-        ShakeT = leak;
-        Oxygen -= leakAmount * Time.deltaTime;
+        float leakAmount = depthDamage * DepthLeakDamage;
+        ShakeT = depthDamage;
+
+        Health -= leakAmount * Time.deltaTime;
+
+        Oxygen -= HealthOxygenLeak.Evaluate(1 - (Health / 100)) * Time.deltaTime;
         Oxygen = Mathf.Clamp01(Oxygen);
+
+        LeakedWater += HealthWaterLeak.Evaluate(1-(Health / 100)) * Time.deltaTime * currentDepth * DepthLeakMult;
+        LeakedWater = Mathf.Clamp01(LeakedWater);
     }
 
     void Shake()

@@ -39,8 +39,6 @@ public class Wheel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHan
         if (!Dragging)
             return;
 
-       
-
         var mousePos = MousePos();
 
         var dis = Vector3.Distance(mousePos, rectTransform.anchoredPosition) / OptimalDistance;
@@ -52,7 +50,7 @@ public class Wheel : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHan
         float delta = Vector2.SignedAngle(lastDir, thisDir);
         rot += delta * RotateSpeed * disMult;
 
-        rectTransform.rotation = Quaternion.Euler(0,0,rot);
+        rectTransform.localRotation = Quaternion.Euler(80,0,rot);
 
         prevMousePos = mousePos;
 
