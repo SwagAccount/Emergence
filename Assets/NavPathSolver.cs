@@ -56,8 +56,10 @@ public class NavPathSolver : MonoBehaviour
     }
 
     private bool targetGenerated;
+    private Vector3 targetPos;
     public void SetTarget(Vector3 targetPosition)
     {
+        targetPos = targetPosition;
         targetGenerated = true;
         if ((targetPosition - lastTargetPos).sqrMagnitude < repathDistance * repathDistance)
             return;
@@ -120,7 +122,7 @@ public class NavPathSolver : MonoBehaviour
         }
         else
         {
-            nextPoint = corner;
+            nextPoint = targetPos;
         }
 
         return true;

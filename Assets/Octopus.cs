@@ -20,7 +20,9 @@ public class Octopus : MonoBehaviour
     public float MaxY = 2;
     public float DragDownSpeed = 1;
     public SoundEvent StickSound;
+    public AudioSource StickLoop;
     public SoundEvent UnStickSound;
+    public float StickLoopSmooth = 3f;
     public float StickDelay = 1f;
     public float cooldown;
 
@@ -42,6 +44,9 @@ public class Octopus : MonoBehaviour
 
     public void Stick(OctopusSticker sticker)
     {
+        if (cooldown > 0)
+            return;
+
         if (Time.time < sticker.LastStick + StickDelay)
             return;
         sticker.LastStick = Time.time;
@@ -51,13 +56,14 @@ public class Octopus : MonoBehaviour
         joint.connectedBody = Target.GetComponent<Rigidbody>();
         joint.spring = StickSpring;
         joint.breakForce = StickBreakForce;
-        cooldown = 5f;
+        cooldown = 1f;
         StickSound?.Play(sticker.transform.position);
     }
 
     public void UnStick(OctopusSticker sticker)
     {
         UnStickSound?.Play(sticker.transform.position);
+        cooldown = 1;
     }
 
     void FixedUpdate()
@@ -65,8 +71,7 @@ public class Octopus : MonoBehaviour
         cooldown -= Time.deltaTime;
         var stickCount = Stickers.Count(x => x.Joint != null);
 
-        if (stickCount < 1)
-            Move(cooldown < 0 && Target.transform.position.y < MaxY ? Target.transform.position : startPoint);
+        Move(cooldown < 0 && Target.transform.position.y < MaxY ? Target.transform.position : startPoint);
 
         Arms();
 
@@ -74,6 +79,8 @@ public class Octopus : MonoBehaviour
         float targetY = stickCount >= 1 ? transform.position.y - DragDownSpeed : targetsY;
 
         Depth(targetY);
+
+        StickLoop.volume = Mathf.Lerp(StickLoop.volume, stickCount > 0 ? 1 : 0, StickLoopSmooth * Time.deltaTime);
     }
 
     void Depth(float targetY)

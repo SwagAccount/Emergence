@@ -12,6 +12,11 @@ public class Shark : MonoBehaviour
     private NavPathSolver navPathSolver;
     public float RotationSpeed = 20;
     public float RotationDamp = 1;
+
+    public float DepthSpring = 5f;
+    public float DepthDamp = 6f;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,19 +24,33 @@ public class Shark : MonoBehaviour
         rigidBody = GetComponent<Rigidbody>();
     }
 
+    public GameObject Target => Submarine.Instance.gameObject;
+
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        Move(Submarine.Instance.transform.position);
+        var targetPos = Target.transform.position;
+        Move(targetPos);
         float rot = Mathf.Cos(Time.time * TailSpeed) * TailRotation * rigidBody.velocity.magnitude;
         Tail.transform.localRotation = Quaternion.Euler(0, 0, rot);
-        rigidBody.AddForce( transform.forward * Speed * Time.deltaTime );
+
+        Depth(targetPos.y);
+    }
+
+    void Depth(float targetY)
+    {
+        float displacement = targetY - transform.position.y;
+
+        float force =
+            (displacement * DepthSpring) -
+            (rigidBody.velocity.y * DepthDamp);
+
+        rigidBody.AddForce(force * Vector3.up);
     }
 
     private void Move(Vector3 targetPos)
     {
         navPathSolver.SetTarget(targetPos);
-
         if (!navPathSolver.TryGetNextPoint(out Vector3 corner))
             return;
 
@@ -63,6 +82,6 @@ public class Shark : MonoBehaviour
 
         rigidBody.AddTorque(torque, ForceMode.Acceleration);
 
-        rigidBody.AddForce(transform.forward * Speed * Time.deltaTime);
+        rigidBody.AddForce(transform.forward * Speed);
     }
 }
