@@ -10,19 +10,19 @@ public class Bolt : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
 
     public List<BoltHole> BoltHoles = new();
 
-    private Rigidbody rigidbody;
+    private Rigidbody rigidBody;
     private RectTransform rectTransform;
 
     public Canvas parentCanvas;
     private void Start()
     {
-        rigidbody = GetComponent<Rigidbody>();
+        rigidBody = GetComponent<Rigidbody>();
         rectTransform = GetComponent<RectTransform>();
     }
 
     private void Update()
     {
-        rigidbody.isKinematic = !Free || Dragging;
+        rigidBody.isKinematic = !Free || Dragging;
 
         if (!Dragging)
             return;
@@ -49,8 +49,8 @@ public class Bolt : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHand
     {
         if (Dragging && Free)
         {
-            rigidbody.isKinematic = false;
-            rigidbody.AddForce(eventData.delta);
+            rigidBody.isKinematic = false;
+            rigidBody.AddForce(eventData.delta);
 
             foreach(var boltHole in BoltHoles)
             {

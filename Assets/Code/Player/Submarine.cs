@@ -16,7 +16,7 @@ public class Submarine : MonoBehaviour
     public GameObject Camera;
     public float CameraSmooth = 10f;
 
-    public float CameraHeight = 1.4f;
+    public Vector3 cameraOffset = new Vector3(0, 0.8f, 0);
 
     public float TargetWaterLevel = 4f;
     public float WaterLevel = 3.74f;
@@ -76,9 +76,12 @@ public class Submarine : MonoBehaviour
 
     public List<BoltHole> BoltHoles = new();
 
+    public static Submarine Instance;
+
     Rigidbody rigidBody;
     void Start()
     {
+        Instance = this;
         lastBoltHealth = Health;
         propSize = Propellor.transform.localScale.x;
         rigidBody = GetComponent<Rigidbody>();
@@ -86,7 +89,9 @@ public class Submarine : MonoBehaviour
 
     private void Update()
     {
-        var targetPos = transform.position + Vector3.up * CameraHeight;
+        if (Instance == null)
+            Instance = this;
+        var targetPos = transform.position + cameraOffset;
         Camera.transform.position = Vector3.Lerp(Camera.transform.position, targetPos, Time.deltaTime * CameraSmooth);
     }
 

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39ced6f5fa2dc264683deae71db606cf, type: 3}
+  m_Name: UnStick
+  m_EditorClassIdentifier: 
+  Volume: 1
+  RandomVolume: 0
+  VolumeMax: 1
+  Pitch: 1
+  RandomPitch: 0
+  PitchMax: 1
+  SpacialBlend: 1
+  Sounds:
+  - {fileID: 8300000, guid: 32ba0ad816049634eb41a8705314c0e4, type: 3}
+  - {fileID: 8300000, guid: edfa1cc38291676448d16a63f3560922, type: 3}
+  - {fileID: 8300000, guid: 90cfb7b293406b1409f89357e67a7178, type: 3}
