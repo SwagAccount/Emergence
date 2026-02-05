@@ -267,7 +267,6 @@ public class MissionManager : MonoBehaviour
 
         foreach (var instance in missionStates.Values)
         {
-            Debug.Log(instance.Cooldown);
             var mission = instance.mission;
 
             if (Economy.Money < mission.StartingMoney)

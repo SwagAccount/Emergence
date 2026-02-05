@@ -39,7 +39,7 @@ public class Spawner : MonoBehaviour
                 continue;
             }
 
-            var dist = Vector3.Distance(new Vector3(Target.transform.position.x, 0, Target.transform.position.y), new Vector3(Target.transform.position.x, 0, Target.transform.position.y));
+            var dist = Vector3.Distance(new Vector3(Target.transform.position.x, 0, Target.transform.position.z), new Vector3(enemy.transform.position.x, 0, enemy.transform.position.z));
             if (dist < DespawnDis)
                 continue;
 
@@ -64,7 +64,7 @@ public class Spawner : MonoBehaviour
             newPos = myNavHit.position;
         }
 
-        pos = pos + ( pos - newPos) * 2;
+        pos = pos + (pos - newPos) * 2;
 
         if (Vector3.Distance(new Vector3(pos.x, 0, pos.z), new Vector3(targetPos.x, 0, targetPos.z)) < SpawnRing.x)
             return;
