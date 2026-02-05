@@ -3857,7 +3857,7 @@ MonoBehaviour:
   RotationDamp: 1
   ArmSpeed: 10
   MaxArmDis: 1
-  StickBreakForce: 5
+  StickBreakForce: 3
   StickSpring: 7
   DepthSpring: 5
   DepthDamp: 6
@@ -4063,7 +4063,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Distance: 2.7
   MinY: -100
-  MaxY: -3
+  MaxY: -1
 --- !u!82 &4724738333103480883
 AudioSource:
   m_ObjectHideFlags: 0
