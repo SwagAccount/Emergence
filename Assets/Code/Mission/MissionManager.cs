@@ -15,7 +15,7 @@ public class MissionManager : MonoBehaviour
 
     string SavePath => Application.persistentDataPath + "/missions.json";
 
-    int totalMissionsCompleted;
+    public int totalMissionsCompleted;
 
     void Awake()
     {
@@ -127,8 +127,11 @@ public class MissionManager : MonoBehaviour
         }
     }
 
-    public void ItemsReceived(List<Item> items)
+    public void ItemsReceived(List<Pickup> items)
     {
+        if (items.Count > 0)
+            totalMissionsCompleted++;
+
         for (int i = 0; i < activeSlots.Length; i++)
         {
             var instance = activeSlots[i];
@@ -136,7 +139,7 @@ public class MissionManager : MonoBehaviour
 
             foreach (var item in items)
             {
-                if (item.name == instance.mission.ItemPrefab.GetComponent<Item>().name)
+                if (item.Name == instance.mission.ItemPrefab.GetComponent<Pickup>().Name)
                 {
                     CompleteMission(i);
                     break;
@@ -151,9 +154,7 @@ public class MissionManager : MonoBehaviour
 
         Economy.AddMoney(instance.mission.Reward);
 
-        totalMissionsCompleted++;
-
-        instance.lastCompletedAt = totalMissionsCompleted;
+        instance.lastCompletedAt = totalMissionsCompleted - 1;
 
         instance.currentItemPosition = instance.mission.RollPosition();
 

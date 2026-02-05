@@ -167,6 +167,7 @@ GameObject:
   - component: {fileID: 4279829185902591195}
   - component: {fileID: 2452484026699719393}
   - component: {fileID: 8050191209895598856}
+  - component: {fileID: 7730383541035819937}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -311,11 +312,24 @@ MonoBehaviour:
   SelectableVisual: {fileID: 8754054609003069444}
   Button: {fileID: 2452484026699719393}
   mission: {fileID: 11400000, guid: bf8bfbdff1e8b91448acd88ebcd2dfd1, type: 2}
+  UISounds: {fileID: 7730383541035819937}
   Name: {fileID: 8255043934339414702}
   Depth: {fileID: 4956582609844168994}
   Reward: {fileID: 3299981331461274570}
   Requirement: {fileID: 506090459877373688}
   selectable: 0
+--- !u!114 &7730383541035819937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5675182909277311895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 322a196e86e7946439eabb2be9d8ab20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6528630099159276413
 GameObject:
   m_ObjectHideFlags: 0

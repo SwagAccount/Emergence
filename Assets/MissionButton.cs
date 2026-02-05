@@ -10,6 +10,7 @@ public class MissionButton : MonoBehaviour
     public GameObject SelectableVisual;
     public Button Button;
     public Mission mission;
+    public UISounds UISounds;
 
     public Text Name;
     public Text Depth;
@@ -24,6 +25,7 @@ public class MissionButton : MonoBehaviour
     private void Update()
     {
         Button.enabled = selectable;
+        UISounds.enabled = selectable;
         SelectableVisual.SetActive(!selectable);
         var isSelected = Menu.SelectedMission == mission;
         SelectedVisual.SetActive(isSelected);

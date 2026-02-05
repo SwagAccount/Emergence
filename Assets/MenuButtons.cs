@@ -29,7 +29,28 @@ public class MenuButtons : MonoBehaviour
             missionButton.Name.text = mission.mission.name.ToUpper();
             missionButton.Depth.text = $"{(Mathf.Abs(mission.currentItemPosition.y) + waterLevel) * 50f}m";
             missionButton.Reward.text = $"${mission.mission.Reward}";
-            missionButton.Requirement.text = $"REQUIREMENT: {mission.mission.StartingMoney}";
+            missionButton.Requirement.text = "";
+            if (!missionButton.selectable)
+            {
+                if (Economy.Money < mission.mission.StartingMoney)
+                {
+                    int missingMoney = mission.mission.StartingMoney - Economy.Money;
+                    missionButton.Requirement.text = $"REQUIRES ${missingMoney}";
+                }
+                else
+                {
+                    int missionsSinceLast =
+                        MissionManager.Instance.totalMissionsCompleted - mission.lastCompletedAt;
+
+                    int remaining = mission.mission.MissionDelay - missionsSinceLast;
+
+                    if (remaining > 0)
+                    {
+                        missionButton.Requirement.text =
+                            $"COOLDOWN: {remaining}";
+                    }
+                }
+            }
 
         }
     }

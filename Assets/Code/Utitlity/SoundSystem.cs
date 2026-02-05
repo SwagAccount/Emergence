@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UIElements;
 using UnityEngine.Video;
 
@@ -17,8 +18,12 @@ public class SoundSystem : MonoBehaviour
 
     public static int CurrentIndex = 0;
 
+    public AudioMixerGroup DefaultMixerGroup;
+    public static AudioMixerGroup defaultMixerGroup;
+
     void Start()
     {
+        defaultMixerGroup = DefaultMixerGroup;
         CurrentIndex = 0;
         Instance = this;
 
@@ -49,6 +54,7 @@ public class SoundSystem : MonoBehaviour
             return;
 
         source.Stop();
+        source.outputAudioMixerGroup = defaultMixerGroup;
         soundEvent.Apply(source, volumeMult, pitchMult);
         source.transform.position = position;
         source.Play();

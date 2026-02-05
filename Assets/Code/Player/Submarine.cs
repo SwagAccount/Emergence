@@ -107,6 +107,8 @@ public class Submarine : MonoBehaviour
     private bool boost;
 
     public Rigidbody rigidBody;
+
+    public float EscapeDis = 45f;
     void Start()
     {
         MissionManager.Instance?.SpawnActiveMissionItems();
@@ -167,6 +169,28 @@ public class Submarine : MonoBehaviour
         ManageOxygen();
 
         DoSpeedDamage();
+
+        Escape();
+    }
+
+    void Escape()
+    {
+        var pos = transform.position;
+        pos.y = 0;
+
+        if (pos.magnitude < EscapeDis)
+            return;
+
+        List<Pickup> items = new();
+        foreach(var tug in Tugs)
+        {
+            if (tug.Joint != null && tug.Joint.connectedBody.TryGetComponent<Pickup>(out var pickup))
+                items.Add(pickup);
+        }
+
+        MissionManager.Instance.ItemsReceived(items);
+
+        Transition.ChangeScene("MainMenu");
     }
 
     void DoSpeedDamage()

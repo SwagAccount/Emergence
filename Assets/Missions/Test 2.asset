@@ -15,11 +15,11 @@ MonoBehaviour:
   MissionID: 3
   MissionName: Test 3
   MissionDescription: tesd3
-  Reward: 0
-  ItemPrefab: {fileID: 1104133041697101052, guid: 02f975fd5d6ee164b97cbf6b389b44cb,
+  Reward: 100
+  ItemPrefab: {fileID: 1104133041697101052, guid: 237c73be6d78466498771f56e6446dfd,
     type: 3}
   Positions:
   - {x: 0, y: 0, z: 3}
   - {x: 1, y: 0, z: 3}
   StartingMoney: 10
-  MissionDelay: 0
+  MissionDelay: 1
