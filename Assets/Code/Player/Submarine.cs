@@ -109,6 +109,7 @@ public class Submarine : MonoBehaviour
     public Rigidbody rigidBody;
     void Start()
     {
+        MissionManager.Instance?.SpawnActiveMissionItems();
         Instance = this;
         lastBoltHealth = Health;
         propSize = Propellor.transform.localScale.x;
