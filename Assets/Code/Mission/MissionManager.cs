@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.Progress;
 
@@ -54,7 +55,7 @@ public class MissionManager : MonoBehaviour
             {
                 mission = mission,
                 currentItemPosition = mission.RollPosition(),
-                lastCompletedAt = 0
+                Cooldown = 0
             };
 
             missionStates.Add(mission.MissionID, instance);
@@ -130,7 +131,12 @@ public class MissionManager : MonoBehaviour
     public void ItemsReceived(List<Pickup> items)
     {
         if (items.Count > 0)
-            totalMissionsCompleted++;
+        {
+            for(int i = 0; i < missionStates.Values.Count(); i++)
+            {
+                missionStates.Values.ElementAt(i).Cooldown--;
+            }
+        }
 
         for (int i = 0; i < activeSlots.Length; i++)
         {
@@ -154,7 +160,7 @@ public class MissionManager : MonoBehaviour
 
         Economy.AddMoney(instance.mission.Reward);
 
-        instance.lastCompletedAt = totalMissionsCompleted - 1;
+        instance.Cooldown = instance.mission.MissionDelay;
 
         instance.currentItemPosition = instance.mission.RollPosition();
 
@@ -178,7 +184,7 @@ public class MissionManager : MonoBehaviour
             {
                 missionID = instance.mission.MissionID,
                 currentItemPosition = instance.currentItemPosition,
-                lastCompletedAt = instance.lastCompletedAt
+                cooldown = instance.Cooldown
             });
         }
 
@@ -213,7 +219,7 @@ public class MissionManager : MonoBehaviour
                 {
                     mission = mission,
                     currentItemPosition = data.currentItemPosition,
-                    lastCompletedAt = data.lastCompletedAt
+                    Cooldown = data.cooldown
                 };
             }
             else
@@ -222,7 +228,7 @@ public class MissionManager : MonoBehaviour
                 {
                     mission = mission,
                     currentItemPosition = mission.RollPosition(),
-                    lastCompletedAt = -mission.MissionDelay
+                    Cooldown = 0
                 };
             }
 
@@ -232,7 +238,6 @@ public class MissionManager : MonoBehaviour
         for (int i = 0; i < activeSlots.Length; i++)
         {
             activeSlots[i] = null;
-            Debug.Log(save.activeMissionSlots[i]);
             string id = save.activeMissionSlots[i];
             if (string.IsNullOrEmpty(id))
                 continue;
@@ -247,7 +252,7 @@ public class MissionManager : MonoBehaviour
         public Mission mission;
         public Vector3 currentItemPosition;
         public GameObject spawnedItem;
-        public int lastCompletedAt;
+        public int Cooldown = 0;
     }
 
     public bool MissionActive(Mission mission)
@@ -263,15 +268,13 @@ public class MissionManager : MonoBehaviour
 
         foreach (var instance in missionStates.Values)
         {
+            Debug.Log(instance.Cooldown);
             var mission = instance.mission;
 
             if (Economy.Money < mission.StartingMoney)
                 continue;
 
-            int missionsSinceLast =
-                totalMissionsCompleted - instance.lastCompletedAt;
-
-            if (missionsSinceLast < mission.MissionDelay)
+            if (instance.Cooldown > 0)
                 continue;
 
             result.Add(instance);

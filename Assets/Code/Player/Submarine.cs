@@ -108,6 +108,9 @@ public class Submarine : MonoBehaviour
 
     public Rigidbody rigidBody;
 
+    public bool Eaten;
+    public float EatenSuffocateSpeed = 10;
+
     public float EscapeDis = 45f;
     void Start()
     {
@@ -172,7 +175,7 @@ public class Submarine : MonoBehaviour
 
         Escape();
     }
-
+    bool escaped = false;
     void Escape()
     {
         var pos = transform.position;
@@ -188,7 +191,12 @@ public class Submarine : MonoBehaviour
                 items.Add(pickup);
         }
 
-        MissionManager.Instance.ItemsReceived(items);
+        
+
+        if (escaped != true)
+            MissionManager.Instance.ItemsReceived(items);
+
+        escaped = true;
 
         Transition.ChangeScene("MainMenu");
     }
@@ -286,6 +294,9 @@ public class Submarine : MonoBehaviour
     void Suffocate()
     {
         var suffocating = Oxygen <= 0.01f || LeakedWater > DrownLevel;
+
+        if (Eaten)
+            SuffocateAmount += EatenSuffocateSpeed * Time.deltaTime;
 
         SuffocateAmount += (suffocating ? SuffocateSpeed : -SuffocateRecover) * Time.deltaTime;
         SuffocateAmount = Mathf.Clamp01(SuffocateAmount);

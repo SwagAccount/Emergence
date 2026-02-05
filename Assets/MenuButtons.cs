@@ -39,15 +39,10 @@ public class MenuButtons : MonoBehaviour
                 }
                 else
                 {
-                    int missionsSinceLast =
-                        MissionManager.Instance.totalMissionsCompleted - mission.lastCompletedAt;
-
-                    int remaining = mission.mission.MissionDelay - missionsSinceLast;
-
-                    if (remaining > 0)
+                    if (mission.Cooldown > 0)
                     {
                         missionButton.Requirement.text =
-                            $"COOLDOWN: {remaining}";
+                            $"COOLDOWN: {mission.Cooldown}";
                     }
                 }
             }

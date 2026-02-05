@@ -24,7 +24,7 @@ public class MissionSaveData
 {
     public string missionID;
     public Vector3 currentItemPosition;
-    public int lastCompletedAt;
+    public int cooldown;
 }
 
 [System.Serializable]

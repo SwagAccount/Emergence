@@ -9,7 +9,7 @@ public class DetectionArea : MonoBehaviour
     public float MaxY = 2;
     public GameObject Target => Submarine.Instance.gameObject;
     public bool Inside => 
-        Vector3.Distance( Target.transform.position, transform.position ) < Distance
+        Vector3.Distance( new Vector3( Target.transform.position.x, 0, Target.transform.position.z), new Vector3(transform.position.x, 0, transform.position.z) ) < Distance
         && Target.transform.position.y < MaxY
         && Target.transform.position.y > MinY;
 }
