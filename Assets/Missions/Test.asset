@@ -20,6 +20,5 @@ MonoBehaviour:
     type: 3}
   Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 2, y: 0, z: 0}
   StartingMoney: 0
-  MissionDelay: 1
+  MissionDelay: 0
