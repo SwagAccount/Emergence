@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.PlasticSCM.Editor.WebApi;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +13,12 @@ public class Submarine : MonoBehaviour
     public float RotationPower = 100f;
 
     public float Thrust = 0;
-    public float ThrustPower = 10f;
+    public float ThrustPower = 2f;
+    public float ThrustBoostPower = 4f;
+
+    public float SpeedDamage = 1;
+    public float SpeedDamageStart = 2.3f;
+    public float SpeedShake = 1f;
 
     public GameObject Camera;
     public float CameraSmooth = 10f;
@@ -23,7 +30,7 @@ public class Submarine : MonoBehaviour
     public float TargetDepth = 0;
     public float MaxHeight = 3.8f;
     public float MaxDepth = 3.5f;
-    public float DepthSpring = 5f;
+    public AnimationCurve DepthSpring;
     public float DepthDamp = 6f;
     public float DepthDepthSlower = 1f;
 
@@ -35,6 +42,24 @@ public class Submarine : MonoBehaviour
     public GameObject Shaker;
     public Image SuffocateImage;
     public WaterUI WaterUI;
+    public Text PickupText;
+    public Button BoostButton;
+    public Image BoostLight;
+
+    public float PickupDistance = 1;
+
+    public List<TugPoint> Tugs;
+
+    [Serializable]
+    public class TugPoint
+    {
+        public LineRenderer Line;
+        public Joint Joint;
+    }
+
+    public float TugMaxDistance = 0.5f;
+    public float TugBreakForce = 4f;
+    public float TugSpring = 10;
 
     public float ShakeSpeed = 10;
     public float ShakeStrength = 10;
@@ -45,6 +70,7 @@ public class Submarine : MonoBehaviour
     public float PropellorSmooth = 1;
 
     public float DepthDragMult = 2;
+    public float MaxDepthDragMultDepth = 7;
 
     public float BaseDrag = 5;
 
@@ -78,13 +104,16 @@ public class Submarine : MonoBehaviour
 
     public static Submarine Instance;
 
-    Rigidbody rigidBody;
+    private bool boost;
+
+    public Rigidbody rigidBody;
     void Start()
     {
         Instance = this;
         lastBoltHealth = Health;
         propSize = Propellor.transform.localScale.x;
         rigidBody = GetComponent<Rigidbody>();
+        BoostButton.onClick.AddListener(() => { boost = !boost; });
     }
 
     private void Update()
@@ -93,10 +122,20 @@ public class Submarine : MonoBehaviour
             Instance = this;
         var targetPos = transform.position + cameraOffset;
         Camera.transform.position = Vector3.Lerp(Camera.transform.position, targetPos, Time.deltaTime * CameraSmooth);
+        ManagePickup();
+        TugVisuals();
+
+        if ( Mathf.Abs( transform.eulerAngles.x ) > 0.1f || Mathf.Abs(transform.eulerAngles.z) > 0.1f)
+        {
+            rigidBody.isKinematic = true;
+            rigidBody.isKinematic = false;
+            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+        }
     }
 
     void FixedUpdate()
     {
+        ShakeT = 0;
         Input();
 
         Rotation();
@@ -125,19 +164,95 @@ public class Submarine : MonoBehaviour
         }
 
         ManageOxygen();
+
+        DoSpeedDamage();
     }
+
+    void DoSpeedDamage()
+    {
+        var vel = rigidBody.velocity;
+        vel.y = 0;
+        var relativeSpeed = vel.magnitude * depth;
+        boostShake = Mathf.Lerp(boostShake, relativeSpeed < SpeedDamageStart ? 0 : SpeedShake, Time.deltaTime * 10);
+
+        if (relativeSpeed < SpeedDamageStart)
+            return;
+
+        Health -= SpeedDamage * Time.deltaTime;
+    }
+
+    void TugVisuals()
+    {
+        foreach (var tug in Tugs)
+        {
+            tug.Line.enabled = tug.Joint != null;
+            if (!tug.Line.enabled)
+                continue;
+
+            tug.Line.SetPositions(new Vector3[]{Vector3.zero, tug.Line.transform.InverseTransformPoint(tug.Joint.connectedBody.transform.position)});
+        }
+    }
+
+    void ManagePickup()
+    {
+        if (Pickup.AllPickups == null || Pickup.AllPickups.Count == 0)
+            return;
+
+        if (!Tugs.Any(x => x.Joint == null))
+        {
+            PickupText.text = "";
+            return;
+        }
+
+
+        Pickup closest = null;
+        float closestDist = PickupDistance * 2;
+
+        Vector3 pos = transform.position;
+
+        foreach (var pickup in Pickup.AllPickups)
+        {
+            if (pickup == null)
+                continue;
+
+            if (pickup.joint != null)
+                continue;
+
+            float dist = Vector3.Distance(transform.position, pickup.transform.position);
+
+            if (dist < closestDist)
+            {
+                closestDist = dist;
+                closest = pickup;
+            }
+        }
+
+        if (closest == null)
+        {
+            PickupText.text = "";
+            return;
+        }
+
+        PickupText.text = $"Press E to Pickup {closest.Name}";
+
+        if (UnityEngine.Input.GetKeyDown(KeyCode.E))
+        {
+            PickupItem(closest);  
+        }
+    }
+
     public float lastBoltHealth;
     void Bolts()
     {
         if (lastBoltHealth - Health < 10)
             return;
 
-        for (int i = 0; i < (lastBoltHealth - Health) / 10; i++)
+        for (int i = 0; i + 1 < (lastBoltHealth - Health) / 10; i++)
         {
             var validBoltHoles = BoltHoles.Where(x => x.Bolt != null).ToList();
 
             if (validBoltHoles.Count > 0)
-                validBoltHoles[Random.Range(0, validBoltHoles.Count())].FreeBolt();
+                validBoltHoles[UnityEngine.Random.Range(0, validBoltHoles.Count())].FreeBolt();
         }
 
         lastBoltHealth = Health;
@@ -168,7 +283,7 @@ public class Submarine : MonoBehaviour
         float depthDamage = Mathf.InverseLerp(DepthLeakDepth, MaxDepthLeakDepth, currentDepth);
 
         float leakAmount = depthDamage * DepthLeakDamage;
-        ShakeT = depthDamage;
+        ShakeT += depthDamage;
 
         Health -= leakAmount * Time.deltaTime;
 
@@ -178,12 +293,11 @@ public class Submarine : MonoBehaviour
         LeakedWater += HealthWaterLeak.Evaluate(1-(Health / 100)) * Time.deltaTime * currentDepth * DepthLeakMult;
         LeakedWater = Mathf.Clamp01(LeakedWater);
     }
-
+    float boostShake;
     void Shake()
     {
-        var time = Time.time * ShakeSpeed * ShakeT;
+        var time = Time.time * ShakeSpeed;
         var shakePos = (new Vector3(Mathf.PerlinNoise1D(time + 100), Mathf.PerlinNoise1D(time + 100), 0.5f) - Vector3.one/2) * ShakeStrength;
-
         Shaker.transform.localPosition = Vector3.Lerp(Vector3.zero, shakePos, ShakeT);
     }
 
@@ -200,7 +314,7 @@ public class Submarine : MonoBehaviour
 
     void Drag()
     {
-        var drag = BaseDrag + depth * DepthDragMult;
+        var drag = BaseDrag + Mathf.Clamp( depth, 0, MaxDepthDragMultDepth) * DepthDragMult;
         rigidBody.drag = drag;
         rigidBody.angularDrag = drag;
     }
@@ -221,6 +335,7 @@ public class Submarine : MonoBehaviour
 
     void Input()
     {
+        BoostLight.enabled = boost;
         WheelRotation = -wheel.rot;
         Thrust = Thruster.value;
         TargetDepth = Mathf.Lerp(MaxDepth, 0, DepthSlider.value);
@@ -232,7 +347,7 @@ public class Submarine : MonoBehaviour
         float displacement = targetY - transform.position.y;
 
         float force =
-            (displacement * DepthSpring) -
+            (displacement * DepthSpring.Evaluate(depth)) -
             (rigidBody.velocity.y * DepthDamp);
 
         if (transform.position.y > MaxHeight)
@@ -247,7 +362,10 @@ public class Submarine : MonoBehaviour
 
     void DoThrust()
     {
-        rigidBody.AddForce(transform.forward * ThrustPower * Thrust);
+        var power = boost ? ThrustBoostPower : ThrustPower;
+        rigidBody.AddForce(transform.forward * power * Thrust);
+
+        ShakeT += boostShake;
     }
 
     float lastRotation;
@@ -257,8 +375,47 @@ public class Submarine : MonoBehaviour
         lastRotation = WheelRotation;
 
         if (Mathf.Abs(delta) <= 0)
+        {
             return;
+        }
 
         rigidBody.AddTorque(-Vector3.forward * 100 * delta * RotationPower);
+    }
+
+    public void PickupItem(Pickup target)
+    {
+        if (target == null)
+            return;
+
+        TugPoint closestTug = null;
+        float closestDist = float.MaxValue;
+
+        foreach (var tug in Tugs)
+        {
+            if (tug.Joint != null)
+                continue;
+
+            float dist = Vector3.Distance(tug.Line.transform.position, target.transform.position);
+
+            if (dist < closestDist)
+            {
+                closestDist = dist;
+                closestTug = tug;
+            }
+        }
+
+        if (closestTug == null)
+            return;
+        
+        var joint = closestTug.Line.AddComponent<SpringJoint>();
+        closestTug.Joint = joint;
+        target.joint = joint;
+        joint.autoConfigureConnectedAnchor = false;
+        joint.connectedAnchor = Vector3.zero;
+        joint.spring = TugSpring;
+        joint.breakForce = TugBreakForce;
+        joint.maxDistance = TugMaxDistance;
+        joint.connectedBody = target.GetComponent<Rigidbody>();
+        joint.enableCollision = true;
     }
 }

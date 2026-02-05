@@ -25,6 +25,7 @@ public class Octopus : MonoBehaviour
     public float StickLoopSmooth = 3f;
     public float StickDelay = 1f;
     public float cooldown;
+    private DetectionArea DetectionArea;
 
     Vector3 startPoint;
     NavPathSolver navPathSolver;
@@ -35,6 +36,8 @@ public class Octopus : MonoBehaviour
         rigidBody = GetComponent<Rigidbody>();
         foreach (var armEnd in ArmEnds)
             armEnd.transform.SetParent(null);
+
+        DetectionArea = GetComponent<DetectionArea>();
     }
 
     public List<Rigidbody> ArmEnds = new();
@@ -66,16 +69,19 @@ public class Octopus : MonoBehaviour
         cooldown = 1;
     }
 
+    bool chasing;
     void FixedUpdate()
     {
+        chasing = DetectionArea.Inside;
+
         cooldown -= Time.deltaTime;
         var stickCount = Stickers.Count(x => x.Joint != null);
 
-        Move(cooldown < 0 && Target.transform.position.y < MaxY ? Target.transform.position : startPoint);
+        Move(chasing ? Target.transform.position : startPoint);
 
         Arms();
 
-        float targetsY = Mathf.Clamp( Target.transform.position.y, -100, MaxY);
+        float targetsY = Mathf.Clamp( navPathSolver.targetPos.y, -100, DetectionArea.MaxY);
         float targetY = stickCount >= 1 ? transform.position.y - DragDownSpeed : targetsY;
 
         Depth(targetY);
@@ -96,15 +102,20 @@ public class Octopus : MonoBehaviour
 
     void Arms()
     {
+        if (!chasing)
+            return;
+
         var armsDistantOrdered = ArmEnds.OrderBy(x => Vector3.Distance(x.transform.position, Target.transform.position));
         for (int i = 0; i < Mathf.Min( ArmEnds.Count, 2); i++)
         {
             if (cooldown > 0)
                 break;
             var armEnd = armsDistantOrdered.ElementAt(i);
+
             var dir = (Target.transform.position - armEnd.transform.position).normalized;
             if (Vector3.Distance(transform.position, armEnd.transform.position) > MaxArmDis)
                 continue;
+
             armEnd.AddForce(dir * ArmSpeed);
         }
     }
@@ -118,8 +129,15 @@ public class Octopus : MonoBehaviour
             return;
 
 
+        var adjustedTarget = corner;
+
+        if (cooldown > 0f)
+        {
+            adjustedTarget = transform.position + (transform.position - corner);
+        }
+
         var prevRot = transform.rotation;
-        transform.LookAt(corner);
+        transform.LookAt(adjustedTarget);
         var targetRot = transform.rotation;
         transform.rotation = prevRot;
 

@@ -3753,6 +3753,7 @@ GameObject:
   - component: {fileID: 8879052102315755250}
   - component: {fileID: 176629218718224277}
   - component: {fileID: 925196891697163814}
+  - component: {fileID: 7759331040864589318}
   m_Layer: 0
   m_Name: Octopus
   m_TagString: Untagged
@@ -3856,7 +3857,7 @@ MonoBehaviour:
   ArmSpeed: 10
   MaxArmDis: 1
   StickBreakForce: 5
-  StickSpring: 100
+  StickSpring: 7
   DepthSpring: 5
   DepthDamp: 6
   MaxY: 2
@@ -3949,6 +3950,7 @@ MonoBehaviour:
   repathDistance: 1
   cornerReachDistance: 0.5
   areaMask: -1
+  targetPos: {x: 0, y: 0, z: 0}
 --- !u!82 &925196891697163814
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4045,6 +4047,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7759331040864589318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3759904293910199262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10eaf9298e76ebd4894feb8b3abb3679, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Distance: 2.7
+  MinY: -100
+  MaxY: -3
 --- !u!1 &3778095699820119037
 GameObject:
   m_ObjectHideFlags: 0

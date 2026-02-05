@@ -56,7 +56,7 @@ public class NavPathSolver : MonoBehaviour
     }
 
     private bool targetGenerated;
-    private Vector3 targetPos;
+    public Vector3 targetPos;
     public void SetTarget(Vector3 targetPosition)
     {
         targetPos = targetPosition;
@@ -86,7 +86,7 @@ public class NavPathSolver : MonoBehaviour
 
     public bool TryGetNextPoint(out Vector3 nextPoint)
     {
-        nextPoint = Vector3.zero;
+        nextPoint = targetPos;
 
         if (!HasPath || currentCornerIndex >= path.corners.Length)
             return false;
@@ -119,10 +119,6 @@ public class NavPathSolver : MonoBehaviour
             dir.y = 0;
             dir = dir.normalized;
             nextPoint = corner - dir * agentRadius;
-        }
-        else
-        {
-            nextPoint = targetPos;
         }
 
         return true;
