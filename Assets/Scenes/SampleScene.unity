@@ -18132,6 +18132,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 925196891697163814, guid: 4436777b41d40ff4db680a9cbf097a18,
         type: 3}
+      propertyPath: MaxDistance
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 925196891697163814, guid: 4436777b41d40ff4db680a9cbf097a18,
+        type: 3}
       propertyPath: OutputAudioMixerGroup
       value: 
       objectReference: {fileID: 888009370441067427, guid: 3a47871ce969c0c4eac0ac10f4d9d04c,
@@ -70519,6 +70524,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 925196891697163814, guid: 4436777b41d40ff4db680a9cbf097a18,
         type: 3}
+      propertyPath: MaxDistance
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 925196891697163814, guid: 4436777b41d40ff4db680a9cbf097a18,
+        type: 3}
       propertyPath: OutputAudioMixerGroup
       value: 
       objectReference: {fileID: 888009370441067427, guid: 3a47871ce969c0c4eac0ac10f4d9d04c,
@@ -91460,7 +91470,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Distance: 2.7
   MinY: -100
-  MaxY: -1
+  MaxY: -3
 --- !u!114 &1509325796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97979,6 +97989,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 925196891697163814, guid: 4436777b41d40ff4db680a9cbf097a18,
+        type: 3}
+      propertyPath: MaxDistance
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 925196891697163814, guid: 4436777b41d40ff4db680a9cbf097a18,
         type: 3}
@@ -124394,7 +124409,7 @@ PrefabInstance:
     - target: {fileID: 188789485706563101, guid: 4436777b41d40ff4db680a9cbf097a18,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 35.31
+      value: 35.78
       objectReference: {fileID: 0}
     - target: {fileID: 188789485706563101, guid: 4436777b41d40ff4db680a9cbf097a18,
         type: 3}
@@ -124404,7 +124419,7 @@ PrefabInstance:
     - target: {fileID: 188789485706563101, guid: 4436777b41d40ff4db680a9cbf097a18,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.17
+      value: -5.24
       objectReference: {fileID: 0}
     - target: {fileID: 188789485706563101, guid: 4436777b41d40ff4db680a9cbf097a18,
         type: 3}
@@ -124450,6 +124465,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724738333103480883, guid: 4436777b41d40ff4db680a9cbf097a18,
+        type: 3}
+      propertyPath: MaxDistance
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
