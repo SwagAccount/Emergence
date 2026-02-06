@@ -15,7 +15,9 @@ MonoBehaviour:
   MissionID: 25426139
   MissionIcon: {fileID: 21300000, guid: 49af85b84ec8aca4cab678283a708db8, type: 3}
   MissionName: Papers
-  MissionDescription: NO DESC FIX
+  MissionDescription: "From what we\u2019ve seen, a lot of the USB stick are on wildly
+    different heights to each other. You should theoretically find more if you look
+    closer to the\u2026 ground? Reservoir bed? Doesn\u2019t matter, just go deeper."
   Reward: 300
   ItemPrefab: {fileID: 670679057177475842, guid: 687f2b338d23c99439de0ac38c7f5aed,
     type: 3}

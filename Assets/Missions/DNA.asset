@@ -15,10 +15,10 @@ MonoBehaviour:
   MissionID: 5788957
   MissionIcon: {fileID: 21300000, guid: 4f7640133740f6a45a0515ec6b2741f4, type: 3}
   MissionName: DNA
-  MissionDescription: 'Thanks to your efforts, we have reason to believe some of
-    our DNA samples might be salvageable. If you can retrieve them from the old lab,
+  MissionDescription: Thanks to your efforts, we have reason to believe some of our
+    DNA samples might be salvageable. If you can retrieve them from the old lab,
     we will make it worth the risk. Just know that place is where the much more territorial
-    specimens. '
+    specimens hunt
   Reward: 3000
   ItemPrefab: {fileID: 5161356824547079755, guid: 27d4ce0841019b141bfbfcafac8d09fc,
     type: 3}

@@ -15,7 +15,9 @@ MonoBehaviour:
   MissionID: 3683445
   MissionIcon: {fileID: 21300000, guid: 71562a561bf06e342a02f109377f5607, type: 3}
   MissionName: Tape
-  MissionDescription: NO DESC FIX
+  MissionDescription: "We\u2019ve been seeing some cassette tapes floating past you
+    on your dives. They could just be old music, but we kept most of our audio logs
+    on modified cassettes. Bring some back for us, just in case."
   Reward: 500
   ItemPrefab: {fileID: 4764673876736246990, guid: 339765381436974418c710e5135afcae,
     type: 3}

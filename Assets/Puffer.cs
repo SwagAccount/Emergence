@@ -24,6 +24,9 @@ public class Puffer : MonoBehaviour
     public float ExplosionDistance = 0.8f;
     public float ExplosionForce= 100f;
 
+    public AudioSource PuffSound;
+    public SoundEvent ExplosionSound;
+
     public float WaterLevel = 3.74f;
 
     public GameObject Explosion;
@@ -40,6 +43,7 @@ public class Puffer : MonoBehaviour
             Submarine.Instance.Health -= Damage;
             Submarine.Instance.rigidBody.AddForce(dir.normalized * ExplosionForce);
         }
+        ExplosionSound.Play(transform.position);
         Destroy(gameObject);
     }
 
@@ -51,6 +55,7 @@ public class Puffer : MonoBehaviour
     float puff;
     private void FixedUpdate()
     {
+        PuffSound.volume = puff;
         var targetPos = Submarine.Instance.transform.position;
         targetPos.y = 0;
         var pos = transform.position;
