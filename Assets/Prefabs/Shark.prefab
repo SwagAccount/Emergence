@@ -526,6 +526,7 @@ MonoBehaviour:
   Damage: 10
   cooldown: 0
   AttackCoolDown: 1
+  ImpactSound: {fileID: 11400000, guid: 8e61e64801c25104aa0ffeeb8fa1f168, type: 2}
 --- !u!136 &5390680283932169235
 CapsuleCollider:
   m_ObjectHideFlags: 0

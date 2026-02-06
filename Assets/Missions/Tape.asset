@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaa9dd42cca35f144850f25f1bcff69f, type: 3}
+  m_Name: Tape
+  m_EditorClassIdentifier: 
+  MissionID: 3683445
+  MissionIcon: {fileID: 21300000, guid: 71562a561bf06e342a02f109377f5607, type: 3}
+  MissionName: Tape
+  MissionDescription: NO DESC FIX
+  Reward: 500
+  ItemPrefab: {fileID: 4764673876736246990, guid: 339765381436974418c710e5135afcae,
+    type: 3}
+  Positions:
+  - {x: 1.807, y: 0.03, z: -10.58}
+  - {x: 0.22, y: -0.585, z: -1.02}
+  - {x: -1.253, y: 0.057, z: 13.986}
+  - {x: -10.995, y: -4.02, z: 4.68}
+  StartingMoney: 700
+  MissionDelay: 2

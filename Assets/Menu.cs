@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +17,7 @@ public class Menu : MonoBehaviour
     public Text Description;
     public Text Depth;
     public MapDisplay MapDisplay;
+    public Image IconDisplay;
 
     public Text SelectMissionText;
     public GameObject SelectMissionActiveVisual;
@@ -38,6 +40,16 @@ public class Menu : MonoBehaviour
         MissionName.text = missionValid ? SelectedMission.name.ToUpper() : "NO MISSION SELECTED";
         MissionReward.text = missionValid ? $"${SelectedMission.Reward}" : "";
         Description.text = missionValid ? SelectedMission.MissionDescription : "";
+
+        IconDisplay.sprite = SelectedMission?.MissionIcon;
+        IconDisplay.color = missionValid ? Color.white : Color.white.WithAlpha(0);
+
+        if (IconDisplay.sprite != null)
+        {
+            var ratio = (float)IconDisplay.sprite.texture.width / (float)IconDisplay.sprite.texture.height;
+            var scale = IconDisplay.rectTransform.localScale;
+            IconDisplay.rectTransform.localScale = new Vector3(scale.y * ratio, scale.y, scale.z);
+        }
         
 
         var active = MissionManager.MissionActive(SelectedMission);

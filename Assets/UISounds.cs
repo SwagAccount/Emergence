@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -9,14 +10,9 @@ public class UISounds : MonoBehaviour, IPointerEnterHandler, IPointerClickHandle
     {
         HoverSound?.Play();
     }
-    public static SoundEvent ClickSound;
-    public static SoundEvent HoverSound;
+    public SoundEvent ClickSound;
+    public SoundEvent HoverSound;
     // Start is called before the first frame update
-    void Awake()
-    {
-        ClickSound = Resources.Load<SoundEvent>("Sounds/UI/MenuClick");
-        HoverSound = Resources.Load<SoundEvent>("Sounds/UI/MenuHover");
-    }
 
     // Update is called once per frame
     void Update()

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaa9dd42cca35f144850f25f1bcff69f, type: 3}
+  m_Name: Usb Stick 2
+  m_EditorClassIdentifier: 
+  MissionID: 25426139
+  MissionIcon: {fileID: 21300000, guid: 49af85b84ec8aca4cab678283a708db8, type: 3}
+  MissionName: Papers
+  MissionDescription: NO DESC FIX
+  Reward: 300
+  ItemPrefab: {fileID: 670679057177475842, guid: 687f2b338d23c99439de0ac38c7f5aed,
+    type: 3}
+  Positions:
+  - {x: 18.327, y: -3.59, z: -15.501}
+  - {x: -1.49, y: -1.93, z: -21.77}
+  - {x: -13.45, y: -1.93, z: -15.53}
+  - {x: -20.61, y: -1.93, z: 4.53}
+  - {x: -11.9, y: -1.93, z: 18.19}
+  - {x: 1.61, y: -1.93, z: 20.99}
+  StartingMoney: 200
+  MissionDelay: 0

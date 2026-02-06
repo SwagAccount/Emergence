@@ -86,6 +86,9 @@ public class Gulper : MonoBehaviour
         if (!collision.collider.CompareTag("Player"))
             return;
 
+        if (Submarine.Instance.Eaten)
+            return;
+
         Submarine.Instance.Eaten = true;
         GulperDeath.Play();
     }

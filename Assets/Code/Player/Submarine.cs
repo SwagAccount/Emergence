@@ -44,6 +44,8 @@ public class Submarine : MonoBehaviour
     public Text PickupText;
     public Button BoostButton;
     public Image BoostLight;
+    public GameObject DepthIndicator;
+    public Vector2 DepthIndicatorAngles = new Vector2(210, -30);
 
     public float PickupDistance = 1;
 
@@ -111,6 +113,11 @@ public class Submarine : MonoBehaviour
     public float EatenSuffocateSpeed = 10;
 
     public float EscapeDis = 45f;
+
+    float timeSuffocated;
+
+    public SoundEvent DrownSound;
+    public SoundEvent SuffocateSound;
     void Start()
     {
         MissionManager.Instance?.SpawnActiveMissionItems();
@@ -120,7 +127,7 @@ public class Submarine : MonoBehaviour
         rigidBody = GetComponent<Rigidbody>();
         BoostButton.onClick.AddListener(() => { boost = !boost; });
     }
-
+    bool gameOvered;
     private void Update()
     {
         if (Instance == null)
@@ -135,6 +142,20 @@ public class Submarine : MonoBehaviour
             rigidBody.isKinematic = true;
             rigidBody.isKinematic = false;
             transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+        }
+
+        timeSuffocated += (gameOvered ? 1 : -1) * Time.deltaTime;
+        timeSuffocated = Mathf.Clamp(timeSuffocated, 0, 100);
+
+        if (SuffocateAmount >= 0.5f && !gameOvered)
+        {
+            gameOvered = true;
+            (LeakedWater > DrownLevel ? DrownSound : SuffocateSound).Play();
+        }
+
+        if (timeSuffocated > 14)
+        {
+            Transition.ChangeScene("MainMenu");
         }
     }
 
@@ -276,15 +297,20 @@ public class Submarine : MonoBehaviour
     public float lastBoltHealth;
     void Bolts()
     {
-        if (lastBoltHealth - Health < 10)
+        int lastBoltCount = Mathf.FloorToInt(lastBoltHealth / 10f);
+        int currentBoltCount = Mathf.FloorToInt(Health / 10f);
+
+        int boltsToRemove = lastBoltCount - currentBoltCount;
+        if (boltsToRemove <= 0)
             return;
 
-        for (int i = 0; i + 1 < (lastBoltHealth - Health) / 10; i++)
-        {
-            var validBoltHoles = BoltHoles.Where(x => x.Bolt != null).ToList();
+        var validBoltHoles = BoltHoles.Where(x => x.Bolt != null).ToList();
 
-            if (validBoltHoles.Count > 0)
-                validBoltHoles[UnityEngine.Random.Range(0, validBoltHoles.Count())].FreeBolt();
+        for (int i = 0; i < boltsToRemove && validBoltHoles.Count > 0; i++)
+        {
+            int index = UnityEngine.Random.Range(0, validBoltHoles.Count);
+            validBoltHoles[index].FreeBolt();
+            validBoltHoles.RemoveAt(index);
         }
 
         lastBoltHealth = Health;
@@ -378,6 +404,9 @@ public class Submarine : MonoBehaviour
 
     void Depth()
     {
+        if (gameOvered)
+            return;
+
         float targetY = TargetWaterLevel - TargetDepth;
         float displacement = targetY - transform.position.y;
 
@@ -393,6 +422,8 @@ public class Submarine : MonoBehaviour
         force /= depth * DepthDepthSlower;
 
         rigidBody.AddForce(Vector3.up * force, ForceMode.Acceleration);
+
+        DepthIndicator.transform.localEulerAngles = new Vector3(0, 0, Mathf.Lerp(DepthIndicatorAngles.x, DepthIndicatorAngles.y, depth / MaxDepth));
     }
 
     void DoThrust()

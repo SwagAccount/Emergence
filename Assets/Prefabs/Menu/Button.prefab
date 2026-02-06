@@ -330,6 +330,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 322a196e86e7946439eabb2be9d8ab20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ClickSound: {fileID: 11400000, guid: fd2f1dd25f88a7f4eb189f5df7df38ea, type: 2}
+  HoverSound: {fileID: 11400000, guid: 3cedefb4d022a034bbab9a5936192524, type: 2}
 --- !u!1 &6528630099159276413
 GameObject:
   m_ObjectHideFlags: 0

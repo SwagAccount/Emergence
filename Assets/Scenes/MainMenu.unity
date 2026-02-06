@@ -399,6 +399,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 322a196e86e7946439eabb2be9d8ab20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ClickSound: {fileID: 11400000, guid: fd2f1dd25f88a7f4eb189f5df7df38ea, type: 2}
+  HoverSound: {fileID: 11400000, guid: 3cedefb4d022a034bbab9a5936192524, type: 2}
 --- !u!1 &85584309
 GameObject:
   m_ObjectHideFlags: 0
@@ -543,6 +545,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 674430133}
+  - {fileID: 785130875}
   - {fileID: 228644903}
   - {fileID: 1535561490}
   - {fileID: 1753961382}
@@ -582,6 +585,7 @@ MonoBehaviour:
   Description: {fileID: 1439190145}
   Depth: {fileID: 1831450101}
   MapDisplay: {fileID: 464842825}
+  IconDisplay: {fileID: 785130876}
   SelectMissionText: {fileID: 1953876428}
   SelectMissionActiveVisual: {fileID: 2077123856}
   waterLevel: 3.73
@@ -864,9 +868,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AllMissions:
-  - {fileID: 11400000, guid: bf8bfbdff1e8b91448acd88ebcd2dfd1, type: 2}
-  - {fileID: 11400000, guid: 1fae174718e716f4fa96c61d51964c6e, type: 2}
-  - {fileID: 11400000, guid: 7c3f933a18952374c864ef6f168af9f7, type: 2}
+  - {fileID: 11400000, guid: 2e4f838d21a1c704c8714704379f8ae3, type: 2}
+  - {fileID: 11400000, guid: 5ef26d11b95860247b6b77f0b7d2482b, type: 2}
+  - {fileID: 11400000, guid: 4ef517a394c5b7a4f8b3a8995ad93586, type: 2}
+  - {fileID: 11400000, guid: 04f0e920b1a1d81439f4359b4bf1e401, type: 2}
+  - {fileID: 11400000, guid: e8b71a5a72e5bc8449b699593589f2d6, type: 2}
   totalMissionsCompleted: 0
 --- !u!4 &350902227
 Transform:
@@ -1294,6 +1300,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 674430132}
   m_CullTransparentMesh: 1
+--- !u!1 &785130874
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 785130875}
+  - component: {fileID: 785130877}
+  - component: {fileID: 785130876}
+  m_Layer: 5
+  m_Name: Icon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &785130875
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 785130874}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.8774922, y: 1.8774922, z: 1.8774922}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 154537256}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -190, y: 183}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &785130876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 785130874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &785130877
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 785130874}
+  m_CullTransparentMesh: 1
 --- !u!1 &1138657405
 GameObject:
   m_ObjectHideFlags: 0
@@ -1425,6 +1506,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 322a196e86e7946439eabb2be9d8ab20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ClickSound: {fileID: 11400000, guid: fd2f1dd25f88a7f4eb189f5df7df38ea, type: 2}
+  HoverSound: {fileID: 11400000, guid: 3cedefb4d022a034bbab9a5936192524, type: 2}
 --- !u!114 &1177394484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1842,8 +1925,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -442.7131, y: 175.66287}
-  m_SizeDelta: {x: 1574.1938, y: 295.0946}
+  m_AnchoredPosition: {x: -575.51044, y: 175.66287}
+  m_SizeDelta: {x: 1043.0044, y: 295.0946}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1439190145
 MonoBehaviour:
@@ -1867,10 +1950,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 5dce362ce5dd25e4b8a3db304990c4af, type: 3}
-    m_FontSize: 47
+    m_FontSize: 34
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 3
     m_MaxSize: 107
     m_Alignment: 0
     m_AlignByGeometry: 0
@@ -2037,8 +2120,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1566003640}
   m_HandleRect: {fileID: 1566003639}
   m_Direction: 2
-  m_Value: 0.99839365
-  m_Size: 0.054437567
+  m_Value: 0.9983937
+  m_Size: 0.054437574
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

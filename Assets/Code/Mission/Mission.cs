@@ -5,6 +5,7 @@ using UnityEngine;
 public class Mission : ScriptableObject
 {
     public string MissionID;
+    public Sprite MissionIcon;
     public string MissionName;
     public string MissionDescription;
     public int Reward;

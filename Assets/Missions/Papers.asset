@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaa9dd42cca35f144850f25f1bcff69f, type: 3}
+  m_Name: Papers
+  m_EditorClassIdentifier: 
+  MissionID: 4234678
+  MissionIcon: {fileID: 21300000, guid: 0cfe503d42e465a4f9e8b91ee4c5d1e6, type: 3}
+  MissionName: Papers
+  MissionDescription: "You might\u2019ve noticed the clumps of paper floating around
+    occasionally. We have reason to believe that there are some research papers among
+    them. If they are, we need you to bring back as many as you can. In one piece,
+    contractor, we shouldn\u2019t need to remind you how delicate wet paper is."
+  Reward: 250
+  ItemPrefab: {fileID: 9159480467445196458, guid: 7ce979808add7cc4d99bfa081d02d5d1,
+    type: 3}
+  Positions:
+  - {x: 18.327, y: -3.59, z: -15.501}
+  - {x: -1.49, y: -1.93, z: -21.77}
+  - {x: -13.45, y: -1.93, z: -15.53}
+  - {x: -20.61, y: -1.93, z: 4.53}
+  - {x: -11.9, y: -1.93, z: 18.19}
+  - {x: 1.61, y: -1.93, z: 20.99}
+  StartingMoney: 100
+  MissionDelay: 1

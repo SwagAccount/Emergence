@@ -24,6 +24,8 @@ public class Shark : MonoBehaviour
 
     public float AttackCoolDown;
 
+    public SoundEvent ImpactSound;
+
     private void OnCollisionEnter(Collision collision)
     {
         if (!collision.gameObject.CompareTag("Player"))
@@ -36,6 +38,8 @@ public class Shark : MonoBehaviour
 
         Submarine.Instance.rigidBody.AddForce(rigidBody.velocity * 200);
         Submarine.Instance.Health -= Damage;
+
+        ImpactSound.Play(transform.position);
     }
 
     private DetectionArea detectionArea;
