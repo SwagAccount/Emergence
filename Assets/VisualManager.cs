@@ -20,6 +20,6 @@ public class VisualManager : MonoBehaviour
         bool above = transform.position.y > WaterLevel;
         t = Mathf.Lerp(t, above ? 1 : 0, Time.deltaTime * TransitionSpeed);
         Light.intensity = Mathf.Lerp(LightPowerBelow, LightPowerAbove, t);
-        WaterRenderer.material.SetColor("_BaseColor", Color.white.WithAlpha(t*WaterAlpha));
+        WaterRenderer.material.SetColor("_BaseColor", new Color(1,1,1,t*WaterAlpha));
     }
 }

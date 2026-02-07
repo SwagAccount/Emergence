@@ -326,7 +326,7 @@ public class Submarine : MonoBehaviour
         SuffocateAmount += (suffocating ? SuffocateSpeed : -SuffocateRecover) * Time.deltaTime;
         SuffocateAmount = Mathf.Clamp01(SuffocateAmount);
 
-        SuffocateImage.color = Color.black.WithAlpha(SuffocateAmount);
+        SuffocateImage.color = new Color(0, 0, 0, SuffocateAmount);
     }
 
     void Leak()

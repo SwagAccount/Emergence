@@ -42,7 +42,7 @@ public class Menu : MonoBehaviour
         Description.text = missionValid ? SelectedMission.MissionDescription : "";
 
         IconDisplay.sprite = SelectedMission?.MissionIcon;
-        IconDisplay.color = missionValid ? Color.white : Color.white.WithAlpha(0);
+        IconDisplay.color = new Color(1,1,1, missionValid ? 1 : 0);
 
         if (IconDisplay.sprite != null)
         {
