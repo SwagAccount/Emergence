@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39ced6f5fa2dc264683deae71db606cf, type: 3}
   m_Name: PufferPop
   m_EditorClassIdentifier: 
-  Volume: 1
+  Volume: 0.5
   RandomVolume: 0
   VolumeMax: 1
   Pitch: 1
